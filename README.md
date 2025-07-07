@@ -3,6 +3,7 @@
 A lightweight and high-performance matchmaker service written in Go.  
 Designed for real-time game matchmaking with concurrent player support.
 
+# Components
 ## API Server
 The API server provides a RESTful interface for managing matchmaking tickets, match candidates, player acknowledgements, and game results.
 
