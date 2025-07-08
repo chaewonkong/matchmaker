@@ -1,6 +1,9 @@
 package apiserver
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/chaewonkong/matchmaker/schema"
+	"github.com/labstack/echo/v4"
+)
 
 // Handler api handler
 type Handler struct{}
@@ -13,6 +16,12 @@ func NewHandler() *Handler {
 // CreateTicket handles the creation of a matchmaking ticket
 func (h *Handler) CreateTicket(c echo.Context) error {
 	// Implementation for creating a ticket
+	t := &schema.Ticket{}
+	err := c.Bind(t)
+	if err != nil {
+		return c.JSON(400, map[string]string{"error": "Invalid request body"})
+	}
+
 	return nil
 }
 
@@ -37,6 +46,12 @@ func (h *Handler) CreateOrUpdateMatchAck(c echo.Context) error {
 // CreateMatchResult handles the submission of game results (win/loss)
 func (h *Handler) CreateMatchResult(c echo.Context) error {
 	// Implementation for creating match results
+	r := &schema.MatchResult{}
+	err := c.Bind(r)
+	if err != nil {
+		return c.JSON(400, map[string]string{"error": "Invalid request body"})
+	}
+
 	return nil
 }
 
