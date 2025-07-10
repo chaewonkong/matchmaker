@@ -7,7 +7,6 @@ import (
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/apiserver"
 	"github.com/labstack/echo/v4"
-	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -24,16 +23,11 @@ func main() {
 
 func run() int {
 	queueConfigPath := os.Getenv("QUEUE_CONFIG_PATH")
-	f, err := os.Open(queueConfigPath)
-	if err != nil {
-		slog.Error("failed to open queue config file", "error", err)
-		return ExitCodeFailure
-	}
 
-	queueConfig := schema.QueueConfig{}
-	err = yaml.NewDecoder(f).Decode(&queueConfig)
+	queueConfig := schema.NewQueueConfig()
+	err := queueConfig.UnmarshalFromYAML(queueConfigPath)
 	if err != nil {
-		slog.Error("failed to decode queue config file", "error", err)
+		slog.Error("failed to load queue config", "error", err)
 		return ExitCodeFailure
 	}
 
