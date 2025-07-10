@@ -1,5 +1,0 @@
-name: TeamDeathMatch
-id: tdm1
-team_layout:
-  number_of_teams: 2
-  team_capacity: 4
