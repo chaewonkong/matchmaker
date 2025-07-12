@@ -1,9 +1,12 @@
 package schema
 
+import "time"
+
 // Ticket represents a matchmaking ticket.
 type Ticket struct {
-	ID        string   `json:"id"`
-	PlayerIDs []string `json:"player_ids"`
+	ID        string    `json:"id"`
+	PlayerIDs []string  `json:"player_ids"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // Player represents a player.
