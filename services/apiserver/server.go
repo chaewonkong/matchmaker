@@ -1,34 +1,47 @@
 package apiserver
 
 import (
+	"net/http"
+
 	"github.com/chaewonkong/matchmaker/schema"
+	"github.com/chaewonkong/matchmaker/services/apiserver/usecase"
 	"github.com/labstack/echo/v4"
 )
 
 // Handler api handler
-type Handler struct{}
+type Handler struct {
+	ticketService *usecase.TicketService
+}
 
 // NewHandler creates a new API handler
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(ts *usecase.TicketService) *Handler {
+	return &Handler{ts}
 }
 
 // CreateTicket handles the creation of a matchmaking ticket
 func (h *Handler) CreateTicket(c echo.Context) error {
 	// Implementation for creating a ticket
-	t := &schema.Ticket{}
-	err := c.Bind(t)
+	t := schema.Ticket{}
+	err := c.Bind(&t)
 	if err != nil {
-		return c.JSON(400, map[string]string{"error": "Invalid request body"})
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request body"})
 	}
 
-	return nil
+	h.ticketService.Add(t)
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Ticket created successfully", "ticket_id": t.ID})
 }
 
 // DeleteTicketByID handles the cancellation of a matchmaking ticket by ID
 func (h *Handler) DeleteTicketByID(c echo.Context) error {
-	// Implementation for deleting a ticket by ID
-	return nil
+	ticketID := c.Param("ticket_id")
+
+	err := h.ticketService.RemoveByID(ticketID)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Ticket cancelled successfully"})
 }
 
 // FindAllMatchCandidates retrieves all current match candidates

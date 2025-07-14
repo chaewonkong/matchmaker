@@ -6,6 +6,8 @@ import (
 
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/apiserver"
+	"github.com/chaewonkong/matchmaker/services/apiserver/usecase"
+	"github.com/chaewonkong/matchmaker/services/queue"
 	"github.com/labstack/echo/v4"
 )
 
@@ -35,7 +37,9 @@ func run() int {
 	logger.Info("starting the application...")
 
 	e := echo.New()
-	h := apiserver.NewHandler()
+	q := queue.New()
+	ts := usecase.NewTicketService(q)
+	h := apiserver.NewHandler(ts)
 	apiserver.RegisterRoutes(e, h)
 
 	err = e.Start(":8080")
