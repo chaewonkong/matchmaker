@@ -6,7 +6,12 @@ import (
 	"github.com/chaewonkong/matchmaker/schema"
 )
 
-type queue []schema.Ticket
+type ticketEntry struct {
+	schema.Ticket
+	index int
+}
+
+type queue []*ticketEntry
 
 // Less implements heap.Interface.
 func (q queue) Less(i int, j int) bool {
@@ -25,17 +30,19 @@ func (q *queue) Pop() any {
 
 // Push implements heap.Interface.
 func (q *queue) Push(x any) {
-	ticket, ok := x.(schema.Ticket)
+	entry, ok := x.(*ticketEntry)
 	if !ok {
 		return
 	}
-	*q = append(*q, ticket)
+	*q = append(*q, entry)
 }
 
 // Swap implements heap.Interface.
 func (q *queue) Swap(i int, j int) {
 	qs := *q
 	qs[i], qs[j] = qs[j], qs[i]
+	qs[i].index = i
+	qs[j].index = j
 }
 
 // Len implements heap.Interface.

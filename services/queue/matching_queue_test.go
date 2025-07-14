@@ -5,8 +5,9 @@ import (
 	"time"
 
 	"github.com/chaewonkong/matchmaker/schema"
-	"github.com/chaewonkong/matchmaker/services/apiserver/queue"
+	"github.com/chaewonkong/matchmaker/services/queue"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestMatchingQueue(t *testing.T) {
@@ -58,5 +59,30 @@ func TestMatchingQueue(t *testing.T) {
 			assert.True(t, ok, "Expected dequeue to succeed")
 			assert.Equal(t, tickets[i].ID, ticket.ID, "Expected dequeued ticket ID to match")
 		}
+	})
+
+	t.Run("RemoveTicketByID", func(t *testing.T) {
+		q := queue.New()
+		now := time.Now()
+		tickets := []schema.Ticket{
+			{ID: "1", Timestamp: now.Add(3 * time.Second)},
+			{ID: "2", Timestamp: now.Add(2 * time.Second)},
+			{ID: "3", Timestamp: now.Add(1 * time.Second)},
+		}
+
+		for _, tkt := range tickets {
+			q.Enqueue(tkt)
+		}
+
+		assert.Equal(t, 3, q.Len(), "Expected queue length to be 3 after enqueueing 3 tickets")
+
+		require.NotPanics(t, func() {
+			tkt, ok := q.RemoveTicketByID("2")
+			assert.True(t, ok, "Expected ticket with ID '2' to be removed successfully")
+			assert.Equal(t, "2", tkt.ID, "Expected removed ticket ID to match '2'")
+
+			assert.Equal(t, 2, q.Len(), "Expected queue length to be 2 after removing one ticket")
+
+		})
 	})
 }
