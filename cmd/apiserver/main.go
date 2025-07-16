@@ -40,6 +40,10 @@ func run() int {
 	q := queue.New()
 	ts := usecase.NewTicketService(q)
 	h := apiserver.NewHandler(ts)
+
+	// middlewares etc
+	e.Validator = apiserver.NewCustomValidator()
+
 	apiserver.RegisterRoutes(e, h)
 
 	err = e.Start(":8080")

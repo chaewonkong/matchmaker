@@ -4,9 +4,9 @@ import "time"
 
 // Ticket represents a matchmaking ticket.
 type Ticket struct {
-	ID        string    `json:"id"`
-	PlayerIDs []string  `json:"player_ids"`
-	Timestamp time.Time `json:"timestamp"`
+	ID        string    `json:"id" validate:"required"`
+	PlayerIDs []string  `json:"player_ids" validate:"required"`
+	Timestamp time.Time `json:"timestamp" validate:"required"`
 }
 
 // Player represents a player.
