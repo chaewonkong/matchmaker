@@ -21,13 +21,24 @@ func NewHandler(ts *usecase.TicketService) *Handler {
 // CreateTicket handles the creation of a matchmaking ticket
 func (h *Handler) CreateTicket(c echo.Context) error {
 	// Implementation for creating a ticket
-	t := schema.Ticket{}
+	t := schema.TicketRequest{}
 	err := c.Bind(&t)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request body"})
 	}
 
-	h.ticketService.Add(t)
+	// Validate the ticket
+	err = c.Validate(&t)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	tkt, err := t.ToTicket()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid ticket time data"})
+	}
+
+	h.ticketService.Add(tkt)
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Ticket created successfully", "ticket_id": t.ID})
 }
@@ -63,6 +74,12 @@ func (h *Handler) CreateMatchResult(c echo.Context) error {
 	err := c.Bind(r)
 	if err != nil {
 		return c.JSON(400, map[string]string{"error": "Invalid request body"})
+	}
+
+	// Validate the match result
+	err = c.Validate(&r)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
 	return nil
