@@ -39,7 +39,8 @@ func run() int {
 	e := echo.New()
 	q := queue.New()
 	ts := usecase.NewTicketService(q)
-	h := apiserver.NewHandler(ts)
+	ms := usecase.NewMatchService(queueConfig, q)
+	h := apiserver.NewHandler(ts, ms)
 
 	// middlewares etc
 	e.Validator = apiserver.NewCustomValidator()

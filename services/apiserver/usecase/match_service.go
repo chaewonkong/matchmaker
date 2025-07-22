@@ -7,18 +7,19 @@ import (
 
 // MatchService match service
 type MatchService struct {
-	queue *queue.MatchingQueue
-	// pool profile
+	queue       *queue.MatchingQueue
+	queueConfig *schema.QueueConfig
 }
 
 // NewMatchService constructor
-func NewMatchService(q *queue.MatchingQueue) *MatchService {
-	return &MatchService{q}
+func NewMatchService(cfg *schema.QueueConfig, q *queue.MatchingQueue) *MatchService {
+	return &MatchService{queue: q, queueConfig: cfg}
 }
 
 // FindAllMatchCandidates searches all possible match candidates
 func (ms *MatchService) FindAllMatchCandidates() (schema.Match, error) {
 	// Retrieve all match candidates from the queue
+
 	ticket, ok := ms.queue.Dequeue()
 	if ok {
 		return schema.Match{

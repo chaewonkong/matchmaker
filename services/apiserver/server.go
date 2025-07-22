@@ -11,11 +11,12 @@ import (
 // Handler api handler
 type Handler struct {
 	ticketService *usecase.TicketService
+	matchService  *usecase.MatchService
 }
 
 // NewHandler creates a new API handler
-func NewHandler(ts *usecase.TicketService) *Handler {
-	return &Handler{ts}
+func NewHandler(ts *usecase.TicketService, ms *usecase.MatchService) *Handler {
+	return &Handler{ticketService: ts, matchService: ms}
 }
 
 // CreateTicket handles the creation of a matchmaking ticket
