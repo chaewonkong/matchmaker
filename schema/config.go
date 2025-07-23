@@ -7,11 +7,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type MatchingStrategy string
+
 // QueueConfig represents the configuration for the matchmaking queue.
 type QueueConfig struct {
-	Name       string     `json:"name" yaml:"name"`
-	ID         string     `json:"id" yaml:"id"`
-	TeamLayout TeamLayout `json:"team_layout" yaml:"team_layout"`
+	Name       string           `json:"name" yaml:"name"`
+	ID         string           `json:"id" yaml:"id"`
+	TeamLayout TeamLayout       `json:"team_layout" yaml:"team_layout"`
+	Strategy   MatchingStrategy `json:"matching_strategy" yaml:"matching_strategy"`
 }
 
 // TeamLayout represents the layout of teams in the matchmaking system.

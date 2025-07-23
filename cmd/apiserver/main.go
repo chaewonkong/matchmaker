@@ -39,7 +39,10 @@ func run() int {
 	e := echo.New()
 	q := queue.New()
 	ts := usecase.NewTicketService(q)
-	ms := usecase.NewMatchService(queueConfig, q)
+	ms, err := usecase.NewMatchService(queueConfig, q)
+	if err != nil {
+		logger.Error("failed to create match service", "error", err)
+	}
 	h := apiserver.NewHandler(ts, ms)
 
 	// middlewares etc
