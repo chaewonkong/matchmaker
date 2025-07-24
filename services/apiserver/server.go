@@ -58,8 +58,12 @@ func (h *Handler) DeleteTicketByID(c echo.Context) error {
 
 // FindAllMatchCandidates retrieves all current match candidates
 func (h *Handler) FindAllMatchCandidates(c echo.Context) error {
-	// Implementation for finding all match candidates
-	return nil
+	matches, err := h.matchService.FindAllMatchCandidates()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "find match failed"})
+	}
+
+	return c.JSON(http.StatusOK, matches)
 }
 
 // CreateOrUpdateMatchAck handles the creation or update of player acknowledgement for a match
