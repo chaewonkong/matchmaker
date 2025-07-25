@@ -44,6 +44,7 @@ func (q *MatchingQueue) Dequeue() (schema.Ticket, bool) {
 	}
 
 	entry, ok := heap.Pop(&q.queue).(*ticketEntry)
+	delete(q.index, entry.Ticket.ID)
 	return entry.Ticket, ok
 }
 
@@ -56,6 +57,7 @@ func (q *MatchingQueue) RemoveTicketByID(ticketID string) (schema.Ticket, bool) 
 
 	v := heap.Remove(&q.queue, entry.index)
 	tkt := v.(*ticketEntry).Ticket
+	delete(q.index, tkt.ID)
 
 	return tkt, true
 }

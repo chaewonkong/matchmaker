@@ -1,6 +1,8 @@
 package strategy
 
 import (
+	"fmt"
+
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/queue"
 	"github.com/google/uuid"
@@ -13,30 +15,49 @@ type PvEStrategy struct {
 }
 
 // FindMatchCandidates finds match candidates according to PvE strategy
-func (pve PvEStrategy) FindMatchCandidates() ([]schema.Match, error) {
+func (pe PvEStrategy) FindMatchCandidates() ([]schema.Match, error) {
 	matchCandidates := []schema.Match{}
-	cap := pve.QueueConfig.TeamLayout.TeamCapacity
-	n := pve.Queue.Len()
+	cap := pe.QueueConfig.TeamLayout.TeamCapacity
 
-	for {
-		if n < cap || cap < 1 {
-			break
-		}
+	if cap < 1 {
+		return nil, fmt.Errorf("error team capacity must be greater than 0")
+	}
+
+	for pe.Queue.Len() > 0 {
 
 		candidate := []schema.Ticket{}
-		for range cap {
-			t, ok := pve.Queue.Dequeue()
-			if !ok {
-				// TODO: log.warn
+		rejected := []schema.Ticket{}
+		slots := cap
+		for {
+			if slots == 0 {
+				// full
 				break
 			}
-			n-- // decrement n
-			candidate = append(candidate, t)
+
+			tkt, ok := pe.Queue.Dequeue()
+			if !ok {
+				break
+			}
+
+			n := len(tkt.PlayerIDs)
+			if n > slots { // too many players
+				rejected = append(rejected, tkt)
+				continue
+			}
+			candidate = append(candidate, tkt)
+			slots -= n
 		}
 
 		// add candidate
-		matchID := uuid.New().String()
-		matchCandidates = append(matchCandidates, schema.Match{ID: matchID, Tickets: candidate})
+		if slots == 0 {
+			matchID := uuid.New().String()
+			matchCandidates = append(matchCandidates, schema.Match{ID: matchID, Tickets: candidate})
+		}
+
+		// add rejected tickets to queue again
+		for _, tkt := range rejected {
+			pe.Queue.Enqueue(tkt)
+		}
 	}
 
 	return matchCandidates, nil
