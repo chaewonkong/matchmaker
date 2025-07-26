@@ -1,0 +1,64 @@
+FORMAT: 1A
+
+# Matchmaker API
+
+Matchmaker API (WIP)
+
+## Group Ticket API
+Creates or Deletes matchmaking request.
+
+### POST /tickets
+Creates a matchmaking request by sending a ticket.
+
++ Request (application/json)
+
+        {
+            "ticket_id": "abc123",
+            "player_ids": ["player1", "player2"],
+            "time": "2025-07-23T15:04:05Z"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "message": "Ticket created successfully", 
+            "ticket_id": "abc123"
+        }
+
+###  DELETE /tickets/{ticket_id}
+Cancels a matchmaking request.
+
++ Parameters
+    + ticket_id (string) - ID of the ticket
+
++ Response 200 (application/json)
+
+        {
+            "message": "Ticket cancelled successfully"
+        }
+
+## Group Match API
+
+Finds and acknowledges match candidates
+
+### GET /matches/candidates
+
++ Response 200 (application/json)
+
+        [
+        {
+            "id": "match-001",
+            "tickets": [
+            {
+                "id": "ticket-101",
+                "player_ids": ["player-1", "player-2"],
+                "timestamp": "2025-07-26T08:00:00Z"
+            },
+            {
+                "id": "ticket-102",
+                "player_ids": ["player-3", "player-4"],
+                "timestamp": "2025-07-26T08:05:00Z"
+            }
+            ]
+        }
+        ]
