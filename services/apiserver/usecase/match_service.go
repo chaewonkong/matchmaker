@@ -5,6 +5,7 @@ import (
 
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy"
+	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy/pve"
 	"github.com/chaewonkong/matchmaker/services/queue"
 )
 
@@ -18,7 +19,7 @@ func NewMatchService(cfg *schema.QueueConfig, q *queue.MatchingQueue) (*MatchSer
 	switch cfg.Strategy {
 	case strategy.PvE:
 		return &MatchService{
-			strategy.PvEStrategy{
+			pve.PvEStrategy{
 				Queue:       q,
 				QueueConfig: cfg,
 			},

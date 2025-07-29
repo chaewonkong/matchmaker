@@ -1,4 +1,4 @@
-package strategy_test
+package pve_test
 
 import (
 	"testing"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy"
+	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy/pve"
 	"github.com/chaewonkong/matchmaker/services/queue"
 	"github.com/stretchr/testify/assert"
 )
@@ -23,7 +24,7 @@ func TestPvEStrategyFindMatchCandidates(t *testing.T) {
 			},
 			Strategy: strategy.PvE,
 		}
-		s := &strategy.PvEStrategy{
+		s := &pve.PvEStrategy{
 			Queue:       queue,
 			QueueConfig: cfg,
 		}
