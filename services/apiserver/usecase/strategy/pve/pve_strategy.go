@@ -51,7 +51,10 @@ func (pe PvEStrategy) FindMatchCandidates() ([]schema.Match, error) {
 		// add candidate
 		if slots == 0 {
 			matchID := uuid.New().String()
-			matchCandidates = append(matchCandidates, schema.Match{ID: matchID, Tickets: candidate})
+			teams := []schema.Team{
+				{Index: 0, Tickets: candidate},
+			}
+			matchCandidates = append(matchCandidates, schema.Match{ID: matchID, Teams: teams})
 		}
 
 		// add rejected tickets to queue again

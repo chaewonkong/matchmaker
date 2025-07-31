@@ -16,8 +16,15 @@ type Player struct {
 
 // Match represents a match
 type Match struct {
-	ID      string   `json:"id"`
-	Tickets []Ticket `json:"tickets"`
+	ID    string `json:"id"`
+	Teams []Team `json:"teams"`
+}
+
+// Team represents a team
+type Team struct {
+	// offset, index, id, number, order,
+	Index   int `json:"index"`
+	Tickets []Ticket
 }
 
 // MatchResult represents the result of a match.

@@ -72,8 +72,10 @@ func TestPvEStrategyFindMatchCandidates(t *testing.T) {
 		for _, match := range results {
 			cnt := 0
 
-			for _, tkt := range match.Tickets {
-				cnt += len(tkt.PlayerIDs)
+			for _, team := range match.Teams {
+				for _, tkt := range team.Tickets {
+					cnt += len(tkt.PlayerIDs)
+				}
 			}
 			assert.Equal(t, 4, cnt)
 		}
