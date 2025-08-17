@@ -1,6 +1,8 @@
 package dualteam
 
 import (
+	"container/list"
+
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy"
 	"github.com/chaewonkong/matchmaker/services/queue"
@@ -14,14 +16,49 @@ type DualteamStrategy struct {
 	QueueConfig *schema.QueueConfig
 }
 
-type team struct {
-	tickets []schema.Ticket
-	size    int
-}
-
 // FindMatchCandidates finds match candidates in dual team layout
 func (d *DualteamStrategy) FindMatchCandidates() ([]schema.Match, error) {
-	return nil, nil
-}
+	candidates := []schema.Match{}
+	// teams := []schema.Team{}
+	numTeams := d.QueueConfig.TeamLayout.NumberOfTeams
+	teamCap := d.QueueConfig.TeamLayout.TeamCapacity
 
-// ?:팀전인 경우에도 match-candidate를 동일한 return type으로 반환할 것인가?
+	// generate teams first
+	teams := list.New()
+
+	for d.Queue.Len() > 0 {
+		team := schema.Team{}
+
+		for len(team.Tickets) < teamCap {
+			tkt, ok := d.Queue.Dequeue()
+			if !ok {
+				break
+			}
+
+			team.Tickets = append(team.Tickets, tkt)
+		}
+		teams.PushBack(team)
+	}
+
+	for teams.Len() > 0 {
+		m := schema.Match{}
+
+		// TODO: shuffle teams, or make each team in match candidate fair and even.
+		// FIXME: this code discards team when match team layout is not satisfied.
+		for i := range numTeams {
+			if teams.Len() > 0 {
+				team := teams.Front().Value.(schema.Team)
+				team.Index = i
+				m.Teams = append(m.Teams, team)
+			}
+		}
+
+		// if m has enough teams, append m to candidates
+		if len(m.Teams) == numTeams {
+			candidates = append(candidates, m)
+		}
+		// if len(m.Teams) < numTeams, discard m
+	}
+
+	return candidates, nil
+}

@@ -50,7 +50,7 @@ func (pe PvEStrategy) FindMatchCandidates() ([]schema.Match, error) {
 
 		// add candidate
 		if slots == 0 {
-			matchID := uuid.New().String()
+			matchID := uuid.NewString()
 			teams := []schema.Team{
 				{Index: 0, Tickets: candidate},
 			}
