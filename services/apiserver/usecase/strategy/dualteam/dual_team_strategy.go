@@ -1,9 +1,8 @@
 package dualteam
 
 import (
-	"container/list"
-
 	"github.com/chaewonkong/matchmaker/schema"
+	"github.com/chaewonkong/matchmaker/services/apiserver/list"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy"
 	"github.com/chaewonkong/matchmaker/services/queue"
 )
@@ -18,13 +17,11 @@ type DualteamStrategy struct {
 
 // FindMatchCandidates finds match candidates in dual team layout
 func (d *DualteamStrategy) FindMatchCandidates() ([]schema.Match, error) {
-	candidates := []schema.Match{}
-	// teams := []schema.Team{}
 	numTeams := d.QueueConfig.TeamLayout.NumberOfTeams
 	teamCap := d.QueueConfig.TeamLayout.TeamCapacity
 
 	// generate teams first
-	teams := list.New()
+	teams := list.New[schema.Team]()
 
 	for d.Queue.Len() > 0 {
 		team := schema.Team{}
@@ -32,22 +29,31 @@ func (d *DualteamStrategy) FindMatchCandidates() ([]schema.Match, error) {
 		for len(team.Tickets) < teamCap {
 			tkt, ok := d.Queue.Dequeue()
 			if !ok {
-				break
+				break // discard
 			}
 
 			team.Tickets = append(team.Tickets, tkt)
 		}
-		teams.PushBack(team)
+		teams.Push(team)
 	}
 
+	// TODO: DI
+	return CandidateBuilder{}.Build(teams, numTeams)
+}
+
+// CandidateBuilder composes match candidates from generated teams
+type CandidateBuilder struct{}
+
+// Build composes match candidates from generated teams
+func (c CandidateBuilder) Build(teams list.List[schema.Team], numTeams int) ([]schema.Match, error) {
+	candidates := []schema.Match{}
 	for teams.Len() > 0 {
 		m := schema.Match{}
 
 		// TODO: shuffle teams, or make each team in match candidate fair and even.
 		// FIXME: this code discards team when match team layout is not satisfied.
 		for i := range numTeams {
-			if teams.Len() > 0 {
-				team := teams.Front().Value.(schema.Team)
+			if team, ok := teams.Pop(); ok {
 				team.Index = i
 				m.Teams = append(m.Teams, team)
 			}
