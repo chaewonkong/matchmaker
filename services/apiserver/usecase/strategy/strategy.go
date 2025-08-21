@@ -8,14 +8,6 @@ type Strategy interface {
 	FindMatchCandidates() ([]schema.Match, error)
 }
 
-const (
-	// player vs Environment
-	PvE schema.MatchingStrategy = "PvE"
-
-	// Nop
-	Nop schema.MatchingStrategy = "Nop"
-)
-
 // NopStrategy nop
 type NopStrategy struct{}
 

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/chaewonkong/matchmaker/schema"
-	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy/pve"
 	"github.com/chaewonkong/matchmaker/services/queue"
 	"github.com/stretchr/testify/assert"
@@ -22,7 +21,7 @@ func TestPvEStrategyFindMatchCandidates(t *testing.T) {
 				NumberOfTeams: 1,
 				TeamCapacity:  4,
 			},
-			Strategy: strategy.PvE,
+			Strategy: schema.PvE,
 		}
 		s := &pve.PvEStrategy{
 			Queue:       queue,

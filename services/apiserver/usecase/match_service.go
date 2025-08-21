@@ -1,10 +1,9 @@
 package usecase
 
 import (
-	"fmt"
-
 	"github.com/chaewonkong/matchmaker/schema"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy"
+	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy/dualteam"
 	"github.com/chaewonkong/matchmaker/services/apiserver/usecase/strategy/pve"
 	"github.com/chaewonkong/matchmaker/services/queue"
 )
@@ -17,19 +16,24 @@ type MatchService struct {
 // NewMatchService constructor
 func NewMatchService(cfg *schema.QueueConfig, q *queue.MatchingQueue) (*MatchService, error) {
 	switch cfg.Strategy {
-	case strategy.PvE:
+	case schema.PvE:
 		return &MatchService{
 			pve.PvEStrategy{
 				Queue:       q,
 				QueueConfig: cfg,
 			},
 		}, nil
-	case strategy.Nop:
+	case schema.DualTeam:
+		return &MatchService{
+			dualteam.DualteamStrategy{
+				Queue:       q,
+				QueueConfig: cfg,
+			},
+		}, nil
+	default: // nop
 		return &MatchService{
 			strategy.NopStrategy{},
 		}, nil
-	default:
-		return nil, fmt.Errorf("error strategy mismatch")
 	}
 }
 

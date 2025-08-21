@@ -16,7 +16,7 @@ type DualteamStrategy struct {
 }
 
 // FindMatchCandidates finds match candidates in dual team layout
-func (d *DualteamStrategy) FindMatchCandidates() ([]schema.Match, error) {
+func (d DualteamStrategy) FindMatchCandidates() ([]schema.Match, error) {
 	numTeams := d.QueueConfig.TeamLayout.NumberOfTeams
 	teamCap := d.QueueConfig.TeamLayout.TeamCapacity
 

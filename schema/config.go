@@ -9,6 +9,17 @@ import (
 
 type MatchingStrategy string
 
+const (
+	// player vs Environment
+	PvE MatchingStrategy = "PvE"
+
+	// Nop
+	Nop MatchingStrategy = "Nop"
+
+	// DualTeam red team vs blue team
+	DualTeam MatchingStrategy = "DualTeam"
+)
+
 // QueueConfig represents the configuration for the matchmaking queue.
 type QueueConfig struct {
 	Name       string           `json:"name" yaml:"name"`
