@@ -24,6 +24,7 @@ const (
 type QueueConfig struct {
 	Name       string           `json:"name" yaml:"name"`
 	ID         string           `json:"id" yaml:"id"`
+	Version    string           `json:"version" yaml:"version"`
 	TeamLayout TeamLayout       `json:"team_layout" yaml:"team_layout"`
 	Strategy   MatchingStrategy `json:"matching_strategy" yaml:"matching_strategy"`
 }
