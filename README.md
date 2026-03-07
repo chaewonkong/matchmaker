@@ -3,18 +3,18 @@
 A lightweight and high-performance matchmaker service written in Go.  
 Designed for real-time game matchmaking with concurrent player support.
 
+
+# gRPC
+```shell
+$ mise install
+$ mise use buf@1.66.0
+```
+
+Install Go plugins
+```shell
+$ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+```
+
 # Components
-## API Server
-The API server provides a RESTful interface for managing matchmaking tickets, match candidates, player acknowledgements, and game results.
 
-### REST API Endpoints
-
-Below is a summary of the REST API endpoints and their purposes:
-
-| Description                                | HTTP Method | Endpoint                                |
-|--------------------------------------------|-------------|-----------------------------------------|
-| Create matchmaking ticket                  | POST        | `/tickets`                              |
-| Cancel matchmaking ticket                  | DELETE      | `/tickets/{ticket_id}`                  |
-| List current match candidates              | GET         | `/matches/candidates`                   |
-| Create or update player acknowledgement    | PUT         | `/matches/{match_id}/acknowledgement`   |
-| Submit game result (win/loss)              | POST        | `/match-results`                        |

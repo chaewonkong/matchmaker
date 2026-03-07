@@ -2,7 +2,7 @@
 
 ```mermaid
 flowchart LR
-    A[API Server]
+    A[Gateway]
     B@{shape: das, label: "ticket"}
     C@{shape: das, label: "match"}
     D@{shape: cyl, label: "Feature Sture"}
