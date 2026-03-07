@@ -12,12 +12,10 @@ services:
     restart: always
     command: redis-server /usr/local/conf/redis.conf
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: [ 'CMD', 'redis-cli', 'ping' ]
       interval: 10s
       timeout: 5s
       retries: 3
-  api-server:
-    image: api-server:latest
 
 volumes:
   redis-data:
