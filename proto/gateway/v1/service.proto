@@ -1,0 +1,15 @@
+syntax = "proto3";
+package gateway.v1;
+option go_package = "github.com/chaewonkong/matchmaker/gen/go/gateway/v1";
+
+import "gateway/v1/messages.proto";
+
+service GatewayService {
+  rpc CreateTicket(CreateTicketRequest) returns (CreateTicketResponse);
+  rpc CancelTicket(CancelTicketRequest) returns (CancelTicketResponse);
+  rpc AcknowledgeMatch(AcknowledgeMatchRequest) returns (AcknowledgeMatchResponse);
+  rpc SubmitMatchResult(SubmitMatchResultRequest) returns (SubmitMatchResultResponse);
+
+  rpc WatchMatchCandidates(WatchMatchCandidatesRequest)
+      returns (stream WatchMatchCandidatesResponse);
+}

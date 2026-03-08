@@ -1,0 +1,28 @@
+syntax = "proto3";
+package common.v1;
+option go_package = "github.com/chaewonkong/matchmaker/gen/go/common/v1";
+
+import "common/v1/attribute.proto";
+
+message Player {
+  string player_id = 1;
+  map<string, Attribute> attributes = 2;
+}
+
+message Ticket {
+  string ticket_id = 1;
+  repeated Player players = 2;
+  map<string, Attribute> attributes = 3;
+}
+
+message Team {
+  string team_id = 1;
+  repeated Ticket tickets = 2;
+  map<string, Attribute> attributes = 3;
+}
+
+message Match {
+  string match_id = 1;
+  repeated Team teams = 2;
+  map<string, Attribute> attributes = 3;
+}

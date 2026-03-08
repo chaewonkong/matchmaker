@@ -1,0 +1,20 @@
+syntax = "proto3";
+package common.v1;
+option go_package = "github.com/chaewonkong/matchmaker/gen/go/common/v1";
+
+message Attribute {
+  oneof value {
+    double double_value = 1;
+    string string_value = 2;
+    bool bool_value = 3;
+    StringList string_list_value = 4;
+    DoubleList double_list_value = 5;
+    StringMap string_map_value = 6;
+    DoubleMap double_map_value = 7;
+  }
+}
+
+message StringList { repeated string values = 1; }
+message DoubleList { repeated double values = 1; }
+message StringMap  { map<string, string> values = 1; }
+message DoubleMap  { map<string, double> values = 1; }

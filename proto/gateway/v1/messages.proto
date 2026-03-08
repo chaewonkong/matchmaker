@@ -1,0 +1,54 @@
+syntax = "proto3";
+package gateway.v1;
+option go_package = "github.com/chaewonkong/matchmaker/gen/go/gateway/v1";
+
+import "common/v1/entity.proto";
+
+message CreateTicketRequest {
+  repeated common.v1.Ticket tickets = 1;
+}
+
+message CreateTicketResponse {
+  string ticket_id = 1;
+  double estimated_wait_time_sec = 2;
+}
+
+message CancelTicketRequest {
+  string ticket_id = 1;
+}
+
+message CancelTicketResponse {
+  string ticket_id = 1;
+}
+
+message AcknowledgeMatchRequest {
+  string match_id = 1;
+}
+
+message AcknowledgeMatchResponse {
+  string match_id = 1;
+}
+
+message SubmitMatchResultRequest {
+  common.v1.Match match = 1;
+}
+
+message SubmitMatchResultResponse {
+  string match_id = 1;
+}
+
+message WatchMatchCandidatesRequest {
+  string ticket_id = 1;
+}
+
+message WatchMatchCandidatesResponse {
+  oneof event {
+    common.v1.Match match = 1;
+    MatchExpired expired = 2;
+  }
+}
+
+
+message MatchExpired {
+  string reason = 1;
+}
