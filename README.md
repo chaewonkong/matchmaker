@@ -1,20 +1,11 @@
-# 🎮 matchmaker
+# Matchmaker
+A minimalistic self hosted matchmaker for multiplayer games.
 
-A lightweight and high-performance matchmaker service written in Go.  
-Designed for real-time game matchmaking with concurrent player support.
+Supports 1M concurrent players.
 
-# Components
-## API Server
-The API server provides a RESTful interface for managing matchmaking tickets, match candidates, player acknowledgements, and game results.
+## System Design
+![matchmaker system design](docs/design/matchmaker_0523rev3.png)
 
-### REST API Endpoints
-
-Below is a summary of the REST API endpoints and their purposes:
-
-| Description                                | HTTP Method | Endpoint                                |
-|--------------------------------------------|-------------|-----------------------------------------|
-| Create matchmaking ticket                  | POST        | `/tickets`                              |
-| Cancel matchmaking ticket                  | DELETE      | `/tickets/{ticket_id}`                  |
-| List current match candidates              | GET         | `/matches/candidates`                   |
-| Create or update player acknowledgement    | PUT         | `/matches/{match_id}/acknowledgement`   |
-| Submit game result (win/loss)              | POST        | `/match-results`                        |
+## Features
+- Backfill
+- 
