@@ -1,20 +1,11 @@
-# 🎮 matchmaker
+# Matchmaker
+A minimalistic self hosted matchmaker for multiplayer games.
 
-A lightweight and high-performance matchmaker service written in Go.  
-Designed for real-time game matchmaking with concurrent player support.
+Supports 1M concurrent players.
 
+## System Design
+![matchmaker system design](docs/design/matchmaker_0523rev3.png)
 
-# gRPC
-```shell
-$ mise install
-$ mise use buf@1.66.0
-```
-
-Install Go plugins
-```shell
-$ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-```
-
-# Components
-
+## Features
+- Backfill
+- 
